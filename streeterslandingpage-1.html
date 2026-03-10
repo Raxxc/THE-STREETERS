@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="SlangVerse — The ultimate slang dictionary with lyric annotations. Decode internet culture." />
+  <title>SlangVerse — Decode the Culture</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,600;1,400&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="streetersCSS/style.css" />
+</head>
+
+<body>
+  <!-- ============================================================
+       NAVBAR
+       Sticky top navigation bar
+  ============================================================ -->
+  <nav>
+    <!-- Logo — clicking this goes back to home -->
+    <span class="nav-logo" role="link" aria-label="SlangVerse Home">
+      STREETERS
+    </span>
+    <!-- role="link" tells screen readers this is a link even though it's a span -->
+    <!-- JS: Add click listener to navigate to index.html or scroll to top -->
+
+    <!-- Navigation links — main page sections -->
+    <div class="nav-links">
+      <a href="#trending">Slang</a>    <!-- Links to #trending section on this page -->
+      <a href="#lyrics">Lyrics</a>     <!-- Links to #lyrics section on this page -->
+      <a href="#">Trending</a>         <!-- JS: Will link to trending.html page later -->
+      <a href="#">About</a>            <!-- JS: Will link to about.html page later -->
+    </div>
+
+    <!-- Right side buttons -->
+    <div class="nav-right">
+      <!-- Ghost login button — secondary action -->
+      <button class="btn btn-ghost" style="padding: 8px 18px; font-size: 13px;">
+        Log In
+        <!-- JS: Add click listener to open login model later -->
+      </button>
+
+      <!-- Primary submit button — most important CTA in nav -->
+      <button class="btn btn-primary" style="padding: 8px 18px; font-size: 13px;">
+        + Submit Word
+        <!-- JS: Add click listener to open submit-word modal later -->
+      </button>
+    </div>
+  </nav>
+  <!-- END NAVBAR -->
+
+
+  <!-- ============================================================
+       HERO SECTION
+       The very first thing users see — headline + search bar
+  ============================================================ -->
+  <section class="hero" id="home">
+    <!-- section: semantic landmark, tells browser/screen reader this is a page section -->
+
+    <!-- Decorative background glow — purely visual, no content -->
+    <div class="hero-glow" aria-hidden="true"></div>
+    <!-- aria-hidden="true" hides decorative elements from screen readers -->
+
+    <!-- Small label above headline -->
+    <p class="hero-eyebrow">✦ The Internet's Slang Dictionary + Lyric Annotator</p>
+    <!-- p: paragraph element used for short text blocks -->
+    <h1 class="hero-headline">  
+      <!-- h1: most important heading on the page — only one per page -->
+      DECODE<br />
+      <!-- br: line break — forces next word to new line -->
+      THE <span>CULTURE.</span>
+      <!-- span: inline element used here to color one word differently -->
+    </h1>
+    <!-- Supporting tagline below headline -->
+    <p class="hero-sub">
+      Slang definitions + lyric annotations — all in one place.
+      Know what everyone's actually saying.Nigga 
+    </p>
+
+    <!-- Search bar — the main interactive element of the hero -->
+    <div class="search-wrap" role="search">
+      <!-- div: generic container grouping the search icon + input + button -->
+      <!-- role="search" tells screen readers this group is a search control -->
+
+      <!-- Search icon (emoji used as icon for simplicity) -->
+      <span class="search-icon" aria-hidden="true">🔍</span>
+
+      <!-- Text input where user types their search -->
+      <input
+        type="text"
+        placeholder="Search a slang word, phrase, or lyric..."
+        aria-label="Search slang or lyrics"
+      />
+      <!-- type="text" — plain text input -->
+      <!-- placeholder — hint text shown when empty -->
+      <!-- aria-label — describes the input for screen readers -->
+      <!-- JS: Add 'input' event listener for live autocomplete suggestions -->
+      <!-- JS: Add 'keydown' event for Enter key to trigger search -->
+
+      <!-- Search submit button -->
+      <button class="btn btn-primary" style="border-radius: 8px;">
+        Search
+        <!-- JS: Add click listener to navigate to search results page -->
+      </button>
+    </div>
+    <!-- END SEARCH WRAP -->
+
+    <!-- Filter pill buttons — quick category shortcuts -->
+    <div class="filter-pills">
+      <!-- div: groups all the pill buttons together -->
+      <button class="btn-pill">🔥 Trending</button>
+      <!-- JS: Click filters displayed word cards to show only trending -->
+      <button class="btn-pill"># Gen Z</button>
+      <button class="btn-pill">🎵 Hip-Hop</button>
+      <button class="btn-pill">💬 Twitter Slang</button>
+      <button class="btn-pill">📱 TikTok</button>
+      <!-- JS: Each pill will filter the word cards section dynamically later -->
+    </div>
+
+    <!-- Two main call-to-action buttons -->
+    <div class="hero-ctas">
+      <button class="btn btn-outline">Browse All Slang →</button>
+      <!-- JS: Links to slang-index.html page later -->
+      <button class="btn btn-ghost">🎵 Explore Lyrics</button>
+      <!-- JS: Links to lyrics.html page later -->
+    </div>
+
+    <!-- Stats row — social proof numbers -->
+    <div class="hero-stats">
+      <!-- div: groups all stat items together -->
+
+      <div class="stat-item">
+        <!-- div: groups number + label for one stat -->
+        <div class="stat-number">10K+</div>
+        <div class="stat-label">Words Defined</div>
+      </div>
+
+      <div class="stat-item">
+        <div class="stat-number">500+</div>
+        <div class="stat-label">Lyric Annotations</div>
+      </div>
+
+      <div class="stat-item">
+        <div class="stat-number">50K+</div>
+        <div class="stat-label">Monthly Readers</div>
+      </div>
+    </div>
+  </section>
+  <!-- END HERO SECTION -->
+
+
+  <!-- Thin horizontal divider line between sections -->
+  <hr class="divider" />
+
+
+  <!-- ============================================================
+       TRENDING WORDS SECTION
+       Horizontally scrollable row of word cards
+  ============================================================ -->
+  <div class="section" id="trending">
+    <!-- div: generic section container (section tag would also work here) -->
+
+    <!-- Section header — label + "see all" link -->
+    <div class="section-header">
+      <div>
+        <!-- div: groups eyebrow + title together for alignment -->
+        <p class="section-eyebrow">🔥 Trending Today</p>
+        <h2 class="section-title">HOT RIGHT NOW</h2>
+        <!-- h2: second-level heading — one level below h1 -->
+      </div>
+      <a href="#" class="section-link">See all words →</a>
+      <!-- a: anchor/link tag — href="#" is placeholder, will be real page later -->
+      <!-- JS: Will link to /slang-all.html page later -->
+    </div>
+
+    <!-- Horizontal scrollable row of word cards -->
+    <div class="words-row">
+      <!-- div: flex container that holds all the cards in a row -->
+
+      <!-- Word Card 1 -->
+      <article class="word-card">
+        <!-- article: self-contained piece of content — a word definition -->
+        <!-- JS: Add click listener to open modal with full definition -->
+        <div class="word-card-title">RIZZ</div>
+        <p class="word-card-def">
+          Natural charm and the ability to attract others effortlessly. Short for "charisma."
+        </p>
+        <div class="word-card-tags">
+          <!-- div: groups all tag badges -->
+          <span class="word-tag"># Gen Z</span>
+          <!-- span: inline element used as a small badge/chip -->
+          <span class="word-tag">🔥 Hot</span>
+        </div>
+      </article>
+
+      <!-- Word Card 2 -->
+      <article class="word-card">
+        <div class="word-card-title">SLAY</div>
+        <p class="word-card-def">
+          To perform or look exceptionally well. "She absolutely slayed that audition."
+        </p>
+        <div class="word-card-tags">
+          <span class="word-tag"># Pop Culture</span>
+          <span class="word-tag">💅 Iconic</span>
+        </div>
+      </article>
+
+      <!-- Word Card 3 -->
+      <article class="word-card">
+        <div class="word-card-title">NO CAP</div>
+        <p class="word-card-def">
+          For real, no lie. Used to emphasize that you're telling the truth.
+        </p>
+        <div class="word-card-tags">
+          <span class="word-tag"># Twitter</span>
+          <span class="word-tag">💬 Common</span>
+        </div>
+      </article>
+
+      <!-- Word Card 4 -->
+      <article class="word-card">
+        <div class="word-card-title">BUSSIN</div>
+        <p class="word-card-def">
+          Extremely good, especially about food. "This biryani is bussin, no cap."
+        </p>
+        <div class="word-card-tags">
+          <span class="word-tag"># TikTok</span>
+          <span class="word-tag">🍕 Food</span>
+        </div>
+      </article>
+
+      <!-- Word Card 5 -->
+      <article class="word-card">
+        <div class="word-card-title">LOWKEY</div>
+        <p class="word-card-def">
+          Subtly, quietly, or in an understated way. "I lowkey love that song."
+        </p>
+        <div class="word-card-tags">
+          <span class="word-tag"># Casual</span>
+        </div>
+      </article>
+
+      <!-- Word Card 6 -->
+      <article class="word-card">
+        <div class="word-card-title">VIBE</div>
+        <p class="word-card-def">
+          A feeling, atmosphere, or energy. Can be used as noun or verb. "The vibe is immaculate."
+        </p>
+        <div class="word-card-tags">
+          <span class="word-tag"># Music</span>
+          <span class="word-tag">🎶 Culture</span>
+        </div>
+      </article>
+
+      <!-- Word Card 7 -->
+      <article class="word-card">
+        <div class="word-card-title">DRIP</div>
+        <p class="word-card-def">
+          Stylish outfit or accessories. Having "drip" means your fashion is on point.
+        </p>
+        <div class="word-card-tags">
+          <span class="word-tag"># Hip-Hop</span>
+          <span class="word-tag">👟 Fashion</span>
+        </div>
+      </article>
+
+      <!-- JS: These cards will be dynamically fetched from an API/database later -->
+      <!-- JS: Add left/right scroll arrow buttons to navigate the row -->
+
+    </div>
+    <!-- END WORDS ROW -->
+  </div>
+  <!-- END TRENDING SECTION -->
+
+
+  <hr class="divider" />
+
+
+  <!-- ============================================================
+       LYRIC ANNOTATION SECTION
+       Shows a lyric excerpt with highlighted annotatable phrases
+  ============================================================ -->
+  <div class="lyric-section" id="lyrics">
+    <!-- div: wrapper that sets the dark warm background for this section -->
+
+    <div class="lyric-inner">
+      <!-- div: two-column grid layout container -->
+
+      <!-- LEFT COLUMN — The lyric text -->
+      <div class="lyric-left">
+
+        <p class="section-eyebrow" style="margin-bottom: 16px;">🎵 Featured Annotation</p>
+
+        <!-- The lyric text block — italic, spaced out for readability -->
+        <blockquote class="lyric-text">
+          <!-- blockquote: semantic element for quoted content (lyrics in this case) -->
+
+          "Started from the bottom,
+          <span class="annotatable">now we're here</span>,
+          <!-- span: inline element wrapping the annotatable phrase -->
+          <!-- JS: Add click listener to highlight this annotation in the right panel -->
+          <br />
+          got that
+          <span class="annotatable">drip on me</span>
+          like it's engineered."
+          <!-- JS: Each annotatable span will show a popup/panel on click later -->
+
+          <!-- Song attribution -->
+          <footer class="lyric-attr">
+            <!-- footer inside blockquote: semantic attribution for a quote -->
+            — Drake, <cite>Started from the Bottom</cite>
+            <!-- cite: marks the title of a creative work -->
+          </footer>
+        </blockquote>
+
+      </div>
+      <!-- END LYRIC LEFT -->
+
+      <!-- RIGHT COLUMN — The annotation explanation card -->
+      <div class="lyric-right">
+
+        <!-- Annotation explanation card -->
+        <div class="annotation-card">
+          <!-- div: card container with left border accent styling -->
+
+          <!-- Small badge label -->
+          <p class="annotation-label">✍ Annotation</p>
+
+          <!-- The phrase being annotated — repeated for context -->
+          <h3 class="annotation-phrase">NOW WE'RE HERE</h3>
+          <!-- h3: third-level heading — within this card's context -->
+
+          <!-- The annotation explanation text -->
+          <p class="annotation-body">
+            Drake uses this line to mark his rise from poverty in Scarborough, Toronto
+            to global superstardom. "Here" represents success, recognition, and luxury —
+            the entire arc of his come-up compressed into three words.
+            The phrase has since become a cultural shorthand for any major glow-up.
+          </p>
+
+          <!-- Action button to annotate another line -->
+          <button class="btn btn-annotate">
+            ✍ Annotate a Line
+            <!-- JS: Opens a text-input form for users to submit their own annotation -->
+          </button>
+        </div>
+        <!-- END ANNOTATION CARD -->
+
+      </div>
+      <!-- END LYRIC RIGHT -->
+
+    </div>
+    <!-- END LYRIC INNER -->
+  </div>
+  <!-- END LYRIC SECTION -->
+
+
+  <!-- ============================================================
+       SUBMIT / CTA BANNER
+       Encourages users to contribute their own slang words
+  ============================================================ -->
+  <div class="cta-banner">
+    <!-- div: full-width banner with centered content -->
+
+    <p class="cta-banner-eyebrow">✦ Contribute</p>
+
+    <!-- Big bold CTA headline -->
+    <h2 class="cta-banner-title">KNOW A WORD<br/>WE DON'T?</h2>
+
+    <!-- Supporting description -->
+    <p class="cta-banner-sub">
+      SlangVerse is community-powered. Submit a word, write a definition,
+      and help decode internet culture for everyone.
+    </p>
+
+    <!-- Two action buttons -->
+    <div class="cta-banner-btns">
+      <button class="btn btn-primary" style="font-size: 15px; padding: 13px 32px;">
+        + Submit a Word
+        <!-- JS: Opens word submission form/modal later -->
+      </button>
+      <button class="btn btn-ghost" style="font-size: 15px; padding: 13px 32px;">
+        How It Works
+        <!-- JS: Links to about.html or scrolls to FAQ section later -->
+      </button>
+    </div>
+
+  </div>
+  <!-- END CTA BANNER -->
+
+
+  <!-- ============================================================
+       FOOTER
+       Bottom of page — logo, links, copyright
+  ============================================================ -->
+  <footer>
+    <!-- footer: semantic element marking the bottom of the page -->
+
+    <!-- Footer logo -->
+    <span class="footer-logo">SLANGVERSE</span>
+
+    <!-- Footer nav links -->
+    <nav class="footer-links" aria-label="Footer navigation">
+      <!-- nav: secondary navigation — footer links -->
+      <!-- aria-label: distinguishes this nav from the main nav for screen readers -->
+      <a href="#">Slang</a>
+      <a href="#">Lyrics</a>
+      <a href="#">Trending</a>
+      <a href="#">About</a>
+      <a href="#">Submit</a>
+      <!-- JS: All these will link to their respective pages later -->
+    </nav>
+
+    <!-- Copyright text -->
+    <p class="footer-copy">© 2025 SlangVerse · College Project</p>
+
+  </footer>
+  <!-- END FOOTER -->
+
+
+  <!-- ============================================================
+       JAVASCRIPT PLACEHOLDER
+       All JS will go here or in a separate /js/main.js file later
+  ============================================================ -->
+  <script>
+    // JS: search input live autocomplete — listen for 'input' event on search field
+    // JS: pill filter buttons — filter word cards by category on click
+    // JS: word card click — open definition modal with full word details
+    // JS: annotatable span click — highlight annotation card + show popup
+    // JS: mobile hamburger menu — toggle nav-links visibility on small screens
+    // JS: submit word button — open submission form modal
+    // JS: scroll animations — fade in sections as user scrolls down (Intersection Observer)
+    // JS: nav logo click — scroll to top or navigate to index.html
+  </script>
+
+</body>
+</html>

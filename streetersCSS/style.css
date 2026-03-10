@@ -1,0 +1,890 @@
+/* ============================================================
+   style.css — SlangVerse Landing Page Stylesheet
+   Linked from: index.html via <link rel="stylesheet" href="css/style.css">
+   Theme: Street Noir | Fonts: Bebas Neue + DM Sans
+============================================================ */
+
+
+/* ============================================================
+   CSS CUSTOM PROPERTIES (VARIABLES)
+   Define once here, reuse everywhere. Change one value = changes whole site.
+============================================================ */
+
+:root {
+  --bg:         #0a0a0a;   /* Main page background — deep black */
+  --surface:    #141414;   /* Slightly lighter black for cards/nav */
+  --surface2:   #1c1c1c;   /* Even lighter for nested elements */
+  --border:     #252525;   /* Subtle border color */
+  --border2:    #333333;   /* Slightly more visible border */
+  --accent:     #FFD600;   /* Primary accent — electric yellow */
+  --accent-dim: #FFD60022; /* Transparent version of accent for backgrounds */
+  --text:       #f0f0f0;   /* Main body text color */
+  --muted:      #666666;   /* Dimmed text for labels, metadata */
+  --muted2:     #444444;   /* Even more dimmed text */
+  --font-display: 'Bebas Neue', sans-serif;  /* Used for all big headings/titles */
+  --font-body:    'DM Sans', sans-serif;     /* Used for all body text */
+  --radius:     10px;      /* Standard border-radius for cards */
+  --radius-pill:99px;      /* Full pill/rounded shape */
+  --transition: 0.22s ease; /* Standard transition speed */
+}
+
+
+/* ============================================================
+   RESET & BASE STYLES
+   Remove default browser spacing/sizing inconsistencies
+============================================================ */
+
+* {
+  box-sizing: border-box; /* Padding included in element width — much easier to layout */
+  margin: 0;              /* Remove all default margins */
+  padding: 0;             /* Remove all default paddings */
+}
+
+html {
+  scroll-behavior: smooth; /* Smooth scroll when clicking anchor links like #section */
+}
+
+body {
+  background-color: var(--bg);        /* Dark page background */
+  color: var(--text);                 /* Default text color for whole page */
+  font-family: var(--font-body);      /* DM Sans for all body text */
+  font-size: 15px;                    /* Base font size everything scales from */
+  line-height: 1.6;                   /* Space between lines for readability */
+  overflow-x: hidden;                 /* Prevent horizontal scrollbar */
+  cursor: default;                    /* Custom cursor handled later by JS */
+}
+
+
+/* ============================================================
+   PAGE LOAD ANIMATIONS
+   Elements fade + slide in when the page first loads
+============================================================ */
+
+@keyframes fadeUp {
+  /* Defines an animation: starts invisible+lower, ends visible+in place */
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  /* Simple fade in only — used for background glow */
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideDown {
+  /* Navbar slides in from above on page load */
+  from { opacity: 0; transform: translateY(-16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulseBorder {
+  /* Pulsing glow on the search bar — subtle breathing effect */
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 214, 0, 0); }
+  50%       { box-shadow: 0 0 0 6px rgba(255, 214, 0, 0.08); }
+}
+
+
+/* ============================================================
+   NAVBAR
+============================================================ */
+
+nav {
+  /* Sticky bar that stays at top of screen as you scroll */
+  position: sticky;            /* Sticks to top when scrolling */
+  top: 0;                      /* Attach to the very top */
+  z-index: 999;                /* Stay above all other elements */
+  background: rgba(10, 10, 10, 0.90); /* Semi-transparent background */
+  backdrop-filter: blur(12px); /* Frosted glass blur effect on content behind */
+  border-bottom: 1px solid var(--border); /* Subtle bottom divider line */
+  padding: 0 48px;             /* Left/right breathing room */
+  height: 64px;                /* Fixed nav height */
+  display: flex;               /* Arrange children in a row */
+  align-items: center;         /* Vertically center all nav items */
+  gap: 32px;                   /* Space between nav groups */
+  animation: slideDown 0.5s ease both; /* Slides in on load */
+}
+
+/* Logo text inside the nav */
+.nav-logo {
+  font-family: var(--font-display); /* Bebas Neue for logo */
+  font-size: 26px;
+  letter-spacing: 3px;             /* Wide spacing for poster look */
+  background: linear-gradient(135deg, var(--accent), #FF8C00); /* Yellow to orange gradient */
+  -webkit-background-clip: text;   /* Clip gradient to text shape (webkit prefix) */
+  background-clip: text;           /* Standard version */
+  -webkit-text-fill-color: transparent; /* Make text transparent so gradient shows */
+  cursor: pointer;                 /* Hand cursor — clickable */
+  transition: filter var(--transition), transform var(--transition);
+  /* Smooth change of glow and scale on hover */
+}
+
+.nav-logo:hover {
+  filter: drop-shadow(0 0 10px rgba(255, 214, 0, 0.5)); /* Yellow glow around logo */
+  transform: scale(1.04);          /* Slight grow on hover */
+}
+
+/* Container for the navigation links (Slang, Lyrics, etc.) */
+.nav-links {
+  display: flex;       /* Row of links */
+  align-items: center;
+  gap: 28px;           /* Space between each link */
+  margin-left: 8px;    /* Small offset from logo */
+}
+
+/* Individual nav link item */
+.nav-links a {
+  color: var(--muted);          /* Dimmed by default */
+  text-decoration: none;        /* Remove underline */
+  font-size: 14px;
+  font-weight: 500;
+  position: relative;           /* Needed to position the ::after underline */
+  padding-bottom: 4px;          /* Space for underline to appear below text */
+  transition: color var(--transition);
+}
+
+/* The sliding underline effect — created with a pseudo-element */
+.nav-links a::after {
+  content: '';                  /* Empty element — just for the line */
+  position: absolute;
+  bottom: 0; left: 0;           /* Sits at the bottom of the link */
+  width: 0;                     /* Starts with zero width (hidden) */
+  height: 2px;
+  background: var(--accent);    /* Yellow line */
+  border-radius: var(--radius-pill);
+  transition: width var(--transition); /* Width animates in on hover */
+}
+
+.nav-links a:hover {
+  color: var(--text);           /* Brighten text on hover */
+}
+
+.nav-links a:hover::after {
+  width: 100%;                  /* Underline slides in to full width */
+}
+
+/* Pushes the right-side buttons to the far right of nav */
+.nav-right {
+  margin-left: auto;  /* Auto margin on left = push everything to right edge */
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+
+/* ============================================================
+   BUTTON SYSTEM
+   All button types defined here — reused throughout the page
+============================================================ */
+
+/* Base button styles shared by ALL buttons */
+.btn {
+  display: inline-flex;          /* Flex so icon + text sit in a row */
+  align-items: center;
+  gap: 8px;                      /* Space between icon and text */
+  padding: 10px 22px;
+  border-radius: var(--radius);  /* Rounded corners */
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;               /* Hand cursor */
+  border: 2px solid transparent; /* Base border — colored per variant */
+  transition: background var(--transition),
+              color var(--transition),
+              border-color var(--transition),
+              transform var(--transition),
+              box-shadow var(--transition);
+  /* Smoothly animate all these properties on hover */
+  text-decoration: none;         /* In case used as <a> tag */
+  white-space: nowrap;           /* Prevent text from wrapping */
+}
+
+/* PRIMARY button — solid yellow fill */
+.btn-primary {
+  background: var(--accent);     /* Yellow background */
+  color: #000;                   /* Black text for contrast */
+  border-color: var(--accent);
+}
+
+.btn-primary:hover {
+  background: #ffe033;           /* Slightly lighter yellow on hover */
+  border-color: #ffe033;
+  transform: translateY(-2px);   /* Lift upward */
+  box-shadow: 0 8px 24px rgba(255, 214, 0, 0.35); /* Yellow glow shadow */
+}
+
+/* OUTLINE button — transparent with yellow border, fills on hover */
+.btn-outline {
+  background: transparent;       /* No fill */
+  color: var(--accent);          /* Yellow text */
+  border-color: var(--accent);   /* Yellow border */
+}
+
+.btn-outline:hover {
+  background: var(--accent);     /* Fill with yellow on hover */
+  color: #000;                   /* Text flips to black */
+  transform: translateY(-2px);
+}
+
+/* GHOST button — very subtle, barely visible */
+.btn-ghost {
+  background: transparent;
+  color: var(--muted);
+  border-color: var(--border2);
+}
+
+.btn-ghost:hover {
+  background: var(--surface2);   /* Slight fill on hover */
+  color: var(--text);
+  border-color: var(--muted2);
+}
+
+/* PILL button — fully rounded, used for category filter tags */
+.btn-pill {
+  background: var(--surface);
+  color: var(--muted);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-pill); /* Full round */
+  padding: 8px 18px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background var(--transition),
+              color var(--transition),
+              border-color var(--transition),
+              transform var(--transition);
+}
+
+.btn-pill:hover {
+  background: var(--accent);         /* Fill yellow on hover */
+  color: #000;
+  border-color: var(--accent);
+  transform: scale(1.06);            /* Slightly grow */
+}
+
+/* ANNOTATE button — for the lyrics section, has a shimmer sweep effect */
+.btn-annotate {
+  background: #FF6B35;               /* Orange — distinct from primary yellow */
+  color: #fff;
+  border-color: #FF6B35;
+  position: relative;                /* Needed for the shimmer pseudo-element */
+  overflow: hidden;                  /* Clip the shimmer to button shape */
+}
+
+/* Shimmer sweep — a white flash that moves left-to-right across the button */
+.btn-annotate::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;              /* Starts off-screen to the left */
+  width: 100%; height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,0.28),        /* White flash in the middle */
+    transparent
+  );
+  transition: left 0.45s ease;      /* Sweeps across over 0.45s on hover */
+}
+
+.btn-annotate:hover::before {
+  left: 100%;                        /* Moves off-screen to the right */
+}
+
+.btn-annotate:hover {
+  transform: translateY(-2px);
+}
+
+
+/* ============================================================
+   HERO SECTION
+   The big first thing visitors see
+============================================================ */
+
+.hero {
+  position: relative;            /* So we can position child elements inside */
+  min-height: 88vh;              /* Almost full screen tall */
+  display: flex;
+  flex-direction: column;        /* Stack children vertically */
+  align-items: center;           /* Center horizontally */
+  justify-content: center;       /* Center vertically */
+  text-align: center;            /* Center text */
+  padding: 80px 24px 64px;
+  overflow: hidden;              /* Hide the background glow that bleeds out */
+}
+
+/* Radial glow in hero background — purely decorative */
+.hero-glow {
+  position: absolute;            /* Sits behind all content */
+  top: 0; left: 50%;
+  transform: translateX(-50%);   /* Centered horizontally */
+  width: 900px; height: 600px;
+  background: radial-gradient(
+    ellipse at 50% 30%,
+    rgba(255, 214, 0, 0.07),     /* Faint yellow glow at center */
+    transparent 70%
+  );
+  pointer-events: none;          /* Can't accidentally click on the glow */
+  animation: fadeIn 1.2s ease both; /* Fades in on load */
+}
+
+/* Small label above the headline */
+.hero-eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.28em;        /* Very wide spacing — gives a stamp/label feel */
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 20px;
+  animation: fadeUp 0.6s 0.1s ease both; /* Appears first with slight delay */
+}
+
+/* Main huge headline — the most prominent text on the page */
+.hero-headline {
+  font-family: var(--font-display); /* Bebas Neue */
+  font-size: clamp(56px, 11vw, 112px);
+  /* clamp(min, preferred, max) — scales with viewport but stays in range */
+  line-height: 0.95;             /* Tighter than normal for display fonts */
+  letter-spacing: 4px;
+  color: var(--text);
+  margin-bottom: 20px;
+  animation: fadeUp 0.6s 0.2s ease both; /* Appears after eyebrow */
+}
+
+/* The highlighted word in headline that's yellow */
+.hero-headline span {
+  color: var(--accent);          /* Electric yellow for emphasis */
+}
+
+/* Subtitle paragraph below the headline */
+.hero-sub {
+  font-size: 16px;
+  color: var(--muted);
+  max-width: 480px;              /* Cap width so it doesn't stretch too wide */
+  margin-bottom: 40px;
+  font-weight: 300;              /* Light weight — contrasts with bold headline */
+  animation: fadeUp 0.6s 0.3s ease both;
+}
+
+
+/* ============================================================
+   SEARCH BAR
+============================================================ */
+
+/* Wrapper that holds the search icon, input and button together */
+.search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--surface);
+  border: 2px solid var(--border2);
+  border-radius: 12px;
+  padding: 6px 6px 6px 18px;    /* More padding on left for the text */
+  width: 100%;
+  max-width: 580px;              /* Don't stretch too wide on big screens */
+  margin-bottom: 28px;
+  transition: border-color var(--transition),
+              box-shadow var(--transition),
+              background var(--transition);
+  animation: fadeUp 0.6s 0.4s ease both, pulseBorder 2.5s 1.2s ease 3;
+  /* Fades up, then the border pulses 3 times to draw attention */
+  animation-fill-mode: both;     /* Hold the end state after animation */
+}
+
+/* Yellow border + glow ring when user hovers or types in the search box */
+.search-wrap:hover,
+.search-wrap:focus-within {
+  /* focus-within = applies when anything INSIDE is focused (the input) */
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px var(--accent-dim); /* Outer glow ring */
+  background: #121200;           /* Very dark yellow-tinted background */
+}
+
+/* The search icon */
+.search-icon {
+  font-size: 16px;
+  color: var(--muted2);
+  flex-shrink: 0;                /* Don't shrink even if space is tight */
+  transition: color var(--transition);
+}
+
+/* Icon turns yellow when search bar is active */
+.search-wrap:hover .search-icon,
+.search-wrap:focus-within .search-icon {
+  color: var(--accent);
+}
+
+/* The actual text input field */
+.search-wrap input {
+  flex: 1;                       /* Takes up all remaining space */
+  background: none;              /* Transparent — inherits from parent */
+  border: none;                  /* No border — parent handles it */
+  outline: none;                 /* No blue focus ring from browser */
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 15px;
+  /* JS: Add 'input' event listener for live autocomplete suggestions */
+  /* JS: Add 'keydown' listener to submit on Enter key press */
+}
+
+/* Placeholder text inside the input */
+.search-wrap input::placeholder {
+  color: var(--muted2);          /* Dimmer than real text */
+}
+
+/* Row of filter pills below search */
+.filter-pills {
+  display: flex;
+  flex-wrap: wrap;               /* Wrap to next line if screen is narrow */
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 36px;
+  animation: fadeUp 0.6s 0.5s ease both;
+}
+
+/* Row of CTA buttons below filters */
+.hero-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  animation: fadeUp 0.6s 0.55s ease both;
+}
+
+/* Stats row — "10,000+ words · 500+ annotations" */
+.hero-stats {
+  display: flex;
+  gap: 32px;
+  margin-top: 48px;
+  animation: fadeUp 0.6s 0.65s ease both;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Individual stat item container */
+.stat-item {
+  text-align: center;
+}
+
+/* The big number — "10K+" */
+.stat-number {
+  font-family: var(--font-display); /* Bebas Neue for numbers */
+  font-size: 32px;
+  color: var(--accent);
+  letter-spacing: 2px;
+  line-height: 1;
+}
+
+/* Label below the number */
+.stat-label {
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-top: 4px;
+}
+
+/* Thin horizontal divider line between sections */
+.divider {
+  border: none;                  /* Remove default hr styling */
+  border-top: 1px solid var(--border); /* Single top border = a line */
+  margin: 0;
+}
+
+
+/* ============================================================
+   SECTION SHARED STYLES
+   Reused across Trending, Lyric, etc.
+============================================================ */
+
+/* Wrapper for each content section — controls width and spacing */
+.section {
+  padding: 56px 48px;
+  max-width: 1200px;             /* Never wider than 1200px */
+  margin: 0 auto;                /* Center on page */
+}
+
+/* Section header row (label + optional "see all" link) */
+.section-header {
+  display: flex;
+  align-items: baseline;         /* Align text baselines */
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+
+/* Small uppercase label above section title — e.g. "TRENDING TODAY" */
+.section-eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* Section title heading — e.g. "HOT RIGHT NOW" */
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 4vw, 40px);
+  color: var(--text);
+  letter-spacing: 2px;
+  margin-top: 4px;
+  line-height: 1;
+}
+
+/* "See all →" link on the right of section header */
+.section-link {
+  font-size: 13px;
+  color: var(--muted);
+  text-decoration: none;
+  border-bottom: 1px solid var(--border2); /* Underline as border so it can transition */
+  padding-bottom: 2px;
+  transition: color var(--transition), border-color var(--transition);
+}
+
+.section-link:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+
+/* ============================================================
+   TRENDING WORDS SECTION
+============================================================ */
+
+/* Horizontally scrollable row of word cards */
+.words-row {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;              /* Allow horizontal scroll if cards overflow */
+  padding-bottom: 12px;          /* Space so scrollbar doesn't overlap cards */
+  scroll-snap-type: x mandatory; /* Snaps to each card when scrolling */
+  -webkit-overflow-scrolling: touch; /* Smooth momentum scroll on iOS */
+}
+
+/* Hide the scrollbar visually (it still works with mouse/touch) */
+.words-row::-webkit-scrollbar { display: none; }
+.words-row { scrollbar-width: none; }
+
+/* Individual word card */
+.word-card {
+  flex-shrink: 0;                /* Don't let cards squish — stay fixed width */
+  width: 200px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 18px;
+  scroll-snap-align: start;      /* Snaps to left edge of card when scrolling */
+  cursor: pointer;
+  transition:
+    transform var(--transition),
+    border-color var(--transition),
+    box-shadow var(--transition),
+    background var(--transition);
+  /* JS: Add click listener to open a definition modal later */
+}
+
+/* Card lifts up with yellow border + glow on hover */
+.word-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--accent);
+  box-shadow: 0 14px 36px rgba(255, 214, 0, 0.13);
+  background: #121200;           /* Very dark warm background */
+}
+
+/* The big slang word text on the card */
+.word-card-title {
+  font-family: var(--font-display);
+  font-size: 28px;
+  letter-spacing: 1px;
+  color: var(--accent);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+/* Short definition — clamped to 3 lines */
+.word-card-def {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.5;
+  margin-bottom: 14px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;         /* Clamp to 3 lines then cut with "..." */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Tag row at bottom of card */
+.word-card-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+/* Individual tag badge on word card */
+.word-tag {
+  font-size: 10px;
+  padding: 3px 9px;
+  border-radius: var(--radius-pill);
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  color: var(--muted);
+  transition: background var(--transition),
+              color var(--transition),
+              border-color var(--transition);
+}
+
+/* Tags turn yellow-tinted when parent card is hovered */
+.word-card:hover .word-tag {
+  background: var(--accent-dim);
+  border-color: rgba(255,214,0,0.3);
+  color: var(--accent);
+}
+
+
+/* ============================================================
+   LYRIC ANNOTATION SECTION
+============================================================ */
+
+/* Dark warm background — visually distinct from the rest of the page */
+.lyric-section {
+  background: #090900;           /* Very dark warm black */
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+/* Inner content — two-column grid layout */
+.lyric-inner {
+  padding: 56px 48px;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Two equal columns side by side */
+  gap: 64px;
+  align-items: center;
+}
+
+/* Left column — lyric text (empty rule kept for future overrides) */
+.lyric-left {}
+
+/* Right column — annotation panel (empty rule kept for future overrides) */
+.lyric-right {}
+
+/* The lyric text itself */
+.lyric-text {
+  font-size: clamp(16px, 2.5vw, 20px);
+  color: #999;
+  line-height: 2.4;              /* Generous spacing so highlights have breathing room */
+  font-style: italic;
+  position: relative;
+}
+
+/* A phrase within lyrics that is annotatable — highlighted underline */
+.lyric-text .annotatable {
+  background: rgba(255, 214, 0, 0.1);  /* Faint yellow tint */
+  border-bottom: 2px solid rgba(255, 214, 0, 0.5); /* Yellow underline */
+  padding: 2px 3px;
+  border-radius: 3px;
+  color: #ccbe00;
+  cursor: pointer;
+  transition: background var(--transition),
+              border-color var(--transition),
+              color var(--transition);
+  /* JS: Add click listener to swap annotation card content later */
+}
+
+/* Annotatable phrase lights up fully on hover */
+.lyric-text .annotatable:hover {
+  background: rgba(255, 214, 0, 0.22);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+/* Song attribution line — "— Artist, Song Title" */
+.lyric-attr {
+  margin-top: 20px;
+  font-size: 12px;
+  color: var(--muted2);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-style: normal;            /* Override the parent blockquote's italic */
+}
+
+/* The annotation explanation card on the right column */
+.annotation-card {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 14px;
+  padding: 28px;
+  border-left: 3px solid var(--accent); /* Left accent bar — Genius-inspired */
+}
+
+/* Small "ANNOTATION" label at top of card */
+.annotation-label {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+
+/* The annotated phrase shown at the top of the card */
+.annotation-phrase {
+  font-family: var(--font-display);
+  font-size: 22px;
+  color: var(--text);
+  letter-spacing: 1px;
+  margin-bottom: 14px;
+}
+
+/* The explanation/annotation body text */
+.annotation-body {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+
+/* ============================================================
+   SUBMIT / CTA BANNER
+============================================================ */
+
+/* Full-width dark strip encouraging users to contribute */
+.cta-banner {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 64px 48px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Decorative background glow centered in the banner */
+.cta-banner::before {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px; height: 300px;
+  background: radial-gradient(ellipse, rgba(255,214,0,0.05), transparent 70%);
+  pointer-events: none;         /* Non-clickable decorative element */
+}
+
+/* Small eyebrow label above the banner headline */
+.cta-banner-eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 12px;
+}
+
+/* Large bold banner headline */
+.cta-banner-title {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 6vw, 64px);
+  letter-spacing: 3px;
+  color: var(--text);
+  margin-bottom: 12px;
+  position: relative;           /* Sits above the ::before background glow */
+}
+
+/* Supporting description text */
+.cta-banner-sub {
+  color: var(--muted);
+  font-size: 15px;
+  max-width: 440px;
+  margin: 0 auto 32px;
+}
+
+/* Buttons row inside the banner */
+.cta-banner-btns {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  position: relative;           /* Sits above the ::before background glow */
+}
+
+
+/* ============================================================
+   FOOTER
+============================================================ */
+
+footer {
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  padding: 28px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Logo left, links center, copyright right */
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+/* Footer logo — smaller version of nav logo */
+.footer-logo {
+  font-family: var(--font-display);
+  font-size: 20px;
+  letter-spacing: 3px;
+  color: var(--accent);
+}
+
+/* Footer nav links row */
+.footer-links {
+  display: flex;
+  gap: 20px;
+}
+
+.footer-links a {
+  font-size: 12px;
+  color: var(--muted2);
+  text-decoration: none;
+  transition: color var(--transition);
+}
+
+.footer-links a:hover {
+  color: var(--muted);
+}
+
+/* Copyright text */
+.footer-copy {
+  font-size: 12px;
+  color: var(--muted2);
+}
+
+
+/* ============================================================
+   RESPONSIVE — MOBILE ADJUSTMENTS
+   Below 768px (tablets and phones)
+============================================================ */
+
+@media (max-width: 768px) {
+
+  nav {
+    padding: 0 20px;             /* Reduce nav padding on small screens */
+    gap: 16px;
+  }
+
+  .nav-links {
+    display: none;               /* Hide nav links on mobile — JS will add hamburger later */
+    /* JS: Add hamburger menu toggle for mobile navigation later */
+  }
+
+  .hero { padding: 60px 20px 48px; }
+
+  .section { padding: 40px 20px; }  /* Reduce section padding on mobile */
+
+  .lyric-inner {
+    grid-template-columns: 1fr;  /* Stack lyric + annotation vertically */
+    gap: 32px;
+    padding: 40px 20px;
+  }
+
+  .cta-banner { padding: 48px 20px; }
+
+  footer {
+    flex-direction: column;      /* Stack footer items vertically */
+    align-items: center;
+    text-align: center;
+    padding: 24px 20px;
+  }
+}
